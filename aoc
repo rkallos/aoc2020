@@ -1,0 +1,77 @@
+#!/usr/bin/env tclsh
+
+set usageMessage ""
+append usageMessage \n {Usage:}
+append usageMessage \n "[info script] -day day -part part -input inputFileName"
+append usageMessage \n {}
+
+set baseDir [file dirname [info script]]
+
+array set now [clock format [clock seconds] -format {year %Y month %m day %d}]
+set Selected(year) $now(year)
+set Selected(day) [expr {($now(month) == 12) ? $now(day) : 1}]
+set Selected(part) 0
+set Selected(input) {}
+
+foreach {name value} $argv {
+    switch -exact -- $name {
+        -year {
+            set Selected(year) $value
+        }
+        -day {
+            set Selected(day) $value
+        }
+        -part {
+            set Selected(part) $value
+        }
+        -input {
+            set Selected(input) $value
+        }
+    }
+}
+
+set nsName [format {day%2.2d} $Selected(day)]
+set fName [format {%4.4d/%s} $Selected(year) $nsName.tcl]
+set fPath [file join $baseDir $fName]
+if {![file exists $fPath]} {
+    puts stderr "$fPath is missing"
+    exit 1
+} else {
+    source $fPath
+}
+
+set iPath [format {%s/%4.4d/input/day%2.2d} $baseDir $Selected(year) $Selected(day)]
+if {$Selected(input) ne {}} {
+    set iPath $Selected(input)
+    set usingFile 1
+} elseif {[file exists $iPath]} {
+    file join $baseDir $Selected(year) $Selected(day) input
+    set usingFile 1
+} else {
+    set usingFile 0
+}
+
+if {$usingFile} {
+    if {[catch {open $iPath r} fid]} {
+        puts stderr "Unable to read $iPath: $errorInfo"
+        exit 1
+    }
+    set Selected(data) [read $fid]
+} else {
+    puts {reading input from stdin}
+    set Selected(data) [read stdin]
+}
+
+proc runPart {part} {
+    global nsName
+    global Selected
+    set func [join [list $nsName "::" part$part] ""]
+    puts "day $Selected(day) part $part: [$func $Selected(data)]"
+}
+
+if {$Selected(part) eq 1 || $Selected(part) eq 2} {
+    runPart $Selected(part)
+} else {
+    runPart 1
+    runPart 2
+}
