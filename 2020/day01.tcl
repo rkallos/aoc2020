@@ -1,6 +1,3 @@
-package require tcltest
-namespace import ::tcltest::*
-
 namespace eval day01 {
 
 proc part1 {input} {
@@ -12,6 +9,7 @@ proc part1 {input} {
         }
     }
 }
+e.g. {part1 [list 1721 979 366 299 675 1456]} -> 514579
 
 proc part2 {input} {
     foreach a $input {
@@ -24,7 +22,6 @@ proc part2 {input} {
         }
     }
 }
+e.g. {part2 [list 1721 979 366 299 675 1456]} -> 241861950
 
-test 1_1 {} -body {part1 [list 1721 979 366 299 675 1456]} -result 514579
-test 2_1 {} -body {part2 [list 1721 979 366 299 675 1456]} -result 241861950
 }

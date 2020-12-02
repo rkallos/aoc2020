@@ -12,6 +12,7 @@ set Selected(year) $now(year)
 set Selected(day) [expr {($now(month) == 12) ? $now(day) : 1}]
 set Selected(part) 0
 set Selected(input) {}
+set Selected(test) 0
 
 foreach {name value} $argv {
     switch -exact -- $name {
@@ -27,7 +28,27 @@ foreach {name value} $argv {
         -input {
             set Selected(input) $value
         }
+        -test {
+            set Selected(test) $value
+        }
     }
+}
+
+# e.g. prologue. https://wiki.tcl-lang.org/page/e%2Eg%2E?R=0
+if {$Selected(test)} {
+    # run inline tests
+    set Ntest 0; set Nfail 0
+    proc e.g. {cmd -> expected} {
+        incr ::Ntest
+        catch {uplevel 1 $cmd} res
+        if {$res ne $expected} {
+            puts "$cmd -> $res, expected $expected"
+            incr ::Nfail
+        }
+    }
+} else {
+    # don't run inline tests
+    proc e.g. args {}
 }
 
 set nsName [format {day%2.2d} $Selected(day)]
@@ -38,6 +59,13 @@ if {![file exists $fPath]} {
     exit 1
 } else {
     source $fPath
+}
+
+# e.g. epilogue. Show stats
+if {$Selected(test)} {
+    set egname [format {%4.4d-day%2.2d} $Selected(year) $Selected(day)]
+    puts "$egname : tested $::Ntest, failed $::Nfail"
+    exit 0
 }
 
 set iPath [format {%s/%4.4d/input/day%2.2d} $baseDir $Selected(year) $Selected(day)]
