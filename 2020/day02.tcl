@@ -9,11 +9,8 @@ set test "1-3 a: abcde
 2-9 c: cccccccccc
 "
 
-set rx {([1-9][0-9]*)-([1-9][0-9]*) ([a-z]): ([a-z]+)}
-
 proc matchOccurrences {line} {
-    variable rx
-    regexp $rx $line _ lo hi l pass
+    scan $line {%d-%d %[a-z]: %s} lo hi l pass
     set count [llength [lsearch -all [split $pass {}] $l]]
     return [expr {$count >= $lo && $count <= $hi}]
 }
@@ -25,8 +22,7 @@ proc part1 {input} {
 e.g. {part1 $test} -> 2
 
 proc checkIndices {line} {
-    variable rx
-    regexp $rx $line _ i1 i2 l pass
+    scan $line {%d-%d %[a-z]: %s} i1 i2 l pass
     set n 0
     foreach c "[string index $pass $i1-1] [string index $pass $i2-1]" {
         if {$c == $l} {incr n}
