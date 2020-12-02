@@ -1,5 +1,7 @@
 #!/usr/bin/env tclsh
 
+::tcl::tm::path add ./
+
 set usageMessage ""
 append usageMessage \n {Usage:}
 append usageMessage \n "[info script] -day day -part part -input inputFileName"
