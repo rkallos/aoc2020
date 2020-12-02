@@ -1,3 +1,5 @@
+package require aoc
+
 namespace eval day02 {
 
 # added an extra 'c' line to test the outer boundary
@@ -9,14 +11,6 @@ set test "1-3 a: abcde
 
 set rx {([1-9][0-9]*)-([1-9][0-9]*) ([a-z]): ([a-z]+)}
 
-proc countLines {pred input} {
-    set n 0
-    foreach line [lsearch -all -inline -not [split $input "\n"] {}] {
-        if {[$pred $line]} {incr n}
-    }
-    return $n
-}
-
 proc matchOccurrences {line} {
     variable rx
     regexp $rx $line _ lo hi l pass
@@ -25,7 +19,7 @@ proc matchOccurrences {line} {
 }
 
 proc part1 {input} {
-    return [countLines matchOccurrences $input]
+    return [aoc::countLines matchOccurrences [aoc::nonEmptyLines $input]]
 }
 # see comment above
 e.g. {part1 $test} -> 2
@@ -41,7 +35,7 @@ proc checkIndices {line} {
 }
 
 proc part2 {input} {
-    return [countLines checkIndices $input]
+    return [aoc::countLines checkIndices [aoc::nonEmptyLines $input]]
 }
 e.g. {part2 $test} -> 1
 
