@@ -1,6 +1,8 @@
 namespace eval day01 {
+    namespace export part1 part2
+}
 
-proc part1 {input} {
+proc day01::part1 {input} {
     foreach a $input {
         foreach b $input {
             if {$a + $b == 2020} {
@@ -9,9 +11,9 @@ proc part1 {input} {
         }
     }
 }
-e.g. {part1 [list 1721 979 366 299 675 1456]} -> 514579
+e.g. {day01::part1 [list 1721 979 366 299 675 1456]} -> 514579
 
-proc part2 {input} {
+proc day01::part2 {input} {
     foreach a $input {
         foreach b $input {
             foreach c $input {
@@ -22,6 +24,4 @@ proc part2 {input} {
         }
     }
 }
-e.g. {part2 [list 1721 979 366 299 675 1456]} -> 241861950
-
-}
+e.g. {day01::part2 [list 1721 979 366 299 675 1456]} -> 241861950

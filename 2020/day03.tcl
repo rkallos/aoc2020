@@ -1,6 +1,8 @@
 package require aoc
 
 namespace eval day03 {
+    namespace export part1 part2
+}
 
 set test "..##.......
 #...#...#..
@@ -14,7 +16,7 @@ set test "..##.......
 #...##....#
 .#..#...#.#"
 
-proc descend {lines slope} {
+proc day03::descend {lines slope} {
     lassign $slope down right
     set r 0; set c 0; set trees 0
     while {$r < [llength $lines]} {
@@ -28,15 +30,13 @@ proc descend {lines slope} {
     return $trees
 }
 
-proc part1 {input} {
+proc day03::part1 {input} {
     return [descend $input {1 3}]
 }
-e.g. {part1 $test} -> 7
+e.g. {day03::part1 $test} -> 7
 
-proc part2 {input} {
+proc day03::part2 {input} {
     set slopes {{1 1} {1 3} {1 5} {1 7} {2 1}}
     return [::tcl::mathop::* {*}[lmap slope $slopes {descend $input $slope}]]
 }
-e.g. {part2 $test} -> 336
-
-}
+e.g. {day03::part2 $test} -> 336
