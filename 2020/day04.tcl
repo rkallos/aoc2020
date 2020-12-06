@@ -4,13 +4,6 @@ namespace eval day04 {
     namespace export part1 part2
 }
 
-proc day04::Passports {input} {
-    # a trick to split on a multi-character sequence;
-    # map the sequence to a single character you don't expect.
-    set grouped [split [string map {"\n\n" \u0080} $input] \u0080]
-    lmap p $grouped {string map {"\n" " " : " "} $p}
-}
-
 proc day04::PassportsWithoutMissingFields {passports} {
     set result {}
     foreach p $passports {
@@ -28,7 +21,7 @@ proc day04::PassportsWithoutMissingFields {passports} {
 }
 
 proc day04::part1 {input} {
-    return [llength [PassportsWithoutMissingFields [Passports $input]]]
+    return [llength [PassportsWithoutMissingFields [aoc::lineClusters $input]]]
 }
 
 proc day04::byr {v} {return [expr {$v >= 1920 && $v <= 2002}]}
@@ -75,7 +68,7 @@ proc day04::IsValidPassport {passport} {
 
 proc day04::part2 {input} {
     set result 0
-    foreach p [PassportsWithoutMissingFields [Passports $input]] {
+    foreach p [PassportsWithoutMissingFields [aoc::lineClusters $input]] {
         if {[IsValidPassport $p]} {
             incr result
         }
