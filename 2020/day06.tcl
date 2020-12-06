@@ -8,11 +8,7 @@ set day06::test "abc\n\na\nb\nc\n\nab\nac\n\na\na\na\na\n\nb"
 
 proc day06::CountQuestions {group} {
     set d [dict create]
-    foreach line $group {
-        foreach c [split $line ""] {
-            dict incr d $c 1
-        }
-    }
+    lmap line $group {lmap c [split $line ""] {dict incr d $c}}
     return $d
 }
 
