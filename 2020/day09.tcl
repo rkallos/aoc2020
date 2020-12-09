@@ -50,10 +50,11 @@ proc day09::part2 {input {preamble 25}} {
     set numbers [aoc::nonEmptyLines $input]
     set needle [part1 $input $preamble]
     for {set idx1 0} {$idx1 < [llength $numbers]} {incr idx1} {
-        for {set idx2 1} {$idx2 < [llength $numbers]} {incr idx2} {
-            set l [lrange $numbers $idx1 $idx2]
-            set sum [::tcl::mathop::+ {*}$l]
+        set sum [lindex $numbers $idx1]
+        for {set idx2 [expr {$idx1 + 1}]} {$idx2 < [llength $numbers]} {incr idx2} {
+            incr sum [lindex $numbers $idx2]
             if {$sum == $needle} {
+                set l [lrange $numbers $idx1 $idx2]
                 set min [::tcl::mathfunc::min {*}$l]
                 set max [::tcl::mathfunc::max {*}$l]
                 return [expr {$min + $max}]
