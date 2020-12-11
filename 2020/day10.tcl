@@ -34,4 +34,43 @@ proc day10::part2 {input} {
     return [dict get $paths 0]
 }
 
+# Alternative implementation of part 2 using tribonacci numbers
+# proc day10::tribonacci {n {a 1} {b 2} {c 4}} {
+#     switch $n {
+#         1 {return $a}
+#         2 {return $b}
+#         3 {return $c}
+#         default {
+#             tailcall tribonacci [expr {$n - 1}] $b $c [expr {$a + $b + $c}]
+#         }
+#     }
+# }
+# e.g. {day10::tribonacci 1} -> 1
+# e.g. {day10::tribonacci 2} -> 2
+# e.g. {day10::tribonacci 3} -> 4
+# e.g. {day10::tribonacci 4} -> 7
+# e.g. {day10::tribonacci 5} -> 13
+# e.g. {day10::tribonacci 6} -> 24
+#
+# proc day10::part2 {input} {
+#     set lst [linsert [lsort -integer [aoc::nonEmptyLines $input]] 0 0]
+#     set max [expr {3 + [lindex $lst end]}]
+#     lappend lst $max
+#
+#     set runs {}
+#     set consecutive 0
+#     for {set i 1} {$i < [llength $lst]} {incr i} {
+#         set a [lindex $lst [expr {$i - 1}]]
+#         set b [lindex $lst $i]
+#         if {$b-$a == 1} {
+#             incr consecutive
+#             continue
+#         }
+#         if {$consecutive == 0} {continue}
+#         lappend runs $consecutive
+#         set consecutive 0
+#     }
+#     return [tcl::mathop::* {*}[lmap r $runs {tribonacci $r}]]
+# }
+
 source [file dirname [info script]]/day10.test
