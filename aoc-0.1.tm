@@ -20,3 +20,7 @@ proc aoc::lineClusters {input} {
     set grouped [split [string map {"\n\n" \u0080} $input] \u0080]
     lmap p $grouped {string map {"\n" " " : " "} $p}
 }
+
+proc aoc::manhattan args {
+    ::tcl::mathop::+ {*}[lmap a $args {::tcl::mathfunc::abs $a}]
+}
