@@ -1,6 +1,14 @@
 namespace eval aoc {
     namespace export nonEmptyLines countLines lineClusters
+
+set map [namespace ensemble configure ::string -map]
+dict set map head string_head
+dict set map tail string_tail
+namespace ensemble configure ::string -map $map
 }
+
+proc aoc::string_head {str} {return [string index $str 0]}
+proc aoc::string_tail {str} {return [string range $str 1 end]}
 
 proc aoc::nonEmptyLines {input} {
     return [lsearch -all -inline -not [split $input "\n"] {}]
